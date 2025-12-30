@@ -1,126 +1,159 @@
 
 
-```markdown
+
+````markdown
 # 🥇 Incident Management & Auto-Recovery DevOps Platform
 
-## 📌 Project Overview
+## 📖 Introduction
+The **Incident Management & Auto-Recovery DevOps Platform** is a **production-style major project** that demonstrates how modern DevOps systems handle failures using **Kubernetes self-healing**, monitoring, and automation.
 
-The **Incident Management & Auto-Recovery DevOps Platform** is a **production-style DevOps major project** that simulates real-world application failures and validates **monitoring, alerting, and Kubernetes self-healing mechanisms**.
-
-The project provides a **graphical incident control panel** to trigger incidents such as CPU spikes, application crashes, and repeated health checks, allowing DevOps engineers to observe how the system detects, handles, and recovers from failures automatically.
-
-This project closely mirrors **real incident management workflows used by DevOps and SRE teams**.
+The project provides a **graphical incident control panel** that allows engineers to simulate real-world incidents such as CPU spikes, health check failures, and application crashes, and observe how the system automatically recovers.
 
 ---
 
-## 🎯 Project Objectives
+## 🎯 Problem Statement
+In real production environments, failures such as high CPU usage, application crashes, or unresponsive services can cause downtime and business impact if not handled properly.
 
-- Simulate real production incidents in a controlled environment
-- Validate Kubernetes **self-healing and auto-recovery**
-- Demonstrate incident lifecycle management
-- Reduce downtime through automation
-- Build a **resume-ready major DevOps project**
+Manual intervention increases recovery time and risk.  
+This project solves the problem by implementing **automated incident detection and recovery**.
 
 ---
 
-## 🧠 Key Features
+## 🧠 Solution Overview
+The solution uses:
+- A **Node.js application** to simulate incidents
+- **Docker** for containerization
+- **Kubernetes** for orchestration and self-healing
+- **Prometheus & Grafana** (integration ready) for monitoring and visualization
 
-- 🎛 **Graphical Incident Control Panel**
-  - Health Check
-  - Health Check × N
-  - CPU Spike
-  - CPU Spike × N
-  - Crash Application
-  - Full Incident Scenario (end-to-end)
-
-- 🔥 **Incident Simulation**
-  - CPU exhaustion
-  - Application crash
-  - Health probe failures
-
-- ♻ **Auto-Recovery**
-  - Kubernetes automatically restarts failed pods
-  - No manual intervention required
-
-- 🧪 **Batch Testing**
-  - Multiple health checks and CPU spikes triggered automatically
-
-- 📊 **Monitoring Ready**
-  - Designed for Prometheus and Grafana integration
+A web-based UI allows triggering incidents in a controlled manner.
 
 ---
 
-## 🏗️ System Architecture (High Level)
+## 🏗️ System Architecture
 
-```
+```mermaid
+flowchart LR
+    A[User Browser<br/>Incident Control Panel]
+    B[Node.js Incident Simulation App]
+    C[Docker Container]
+    D[Kubernetes Deployment<br/>Pods & Replicas]
+    E[Self-Healing<br/>Auto Restart]
+    F[Prometheus<br/>Metrics]
+    G[Grafana<br/>Dashboards]
 
-User (Browser)
-↓
-Incident Control Panel (UI)
-↓
-Node.js Incident Simulation Service
-↓
-Docker Container
-↓
-Kubernetes Deployment (Replicas)
-↓
-Self-Healing (Auto Restart Pods)
-↓
-Monitoring & Dashboards (Prometheus / Grafana)
-
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    D --> F
+    F --> G
 ````
 
 ---
 
-## 🧰 Tools & Technologies Used
+## 🔄 Incident Management Flowchart
 
-| Category | Tools |
-|--------|------|
-| Programming Language | Node.js |
-| Containerization | Docker |
-| Orchestration | Kubernetes (Docker Desktop Kubernetes) |
-| Monitoring | Prometheus |
-| Visualization | Grafana |
-| Package Manager | Helm |
-| Version Control | Git & GitHub |
-| CI/CD (Planned) | GitHub Actions |
+```mermaid
+flowchart TD
+    A[User clicks button on UI] --> B[Node.js App receives request]
+    B --> C{Incident Type?}
+
+    C -->|Health Check| D[Return OK / FAILED]
+    D --> E[Display result on UI]
+
+    C -->|CPU Spike| F[Increase CPU Load]
+    F --> G[Prometheus collects metrics]
+    G --> H[Grafana shows CPU spike]
+
+    C -->|Crash App| I[Application exits]
+    I --> J[Kubernetes detects failure]
+    J --> K[Pod auto-restarted]
+    K --> L[Service restored]
+```
+
+---
+
+## 🔁 Incident Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Normal
+    Normal --> Degraded : CPU Spike
+    Degraded --> Incident : Health Check Failure / Crash
+    Incident --> Detection : Kubernetes / Monitoring
+    Detection --> Recovery : Pod Restart
+    Recovery --> Normal
+```
+
+---
+
+## ✨ Key Features
+
+### Incident Simulation
+
+* Health Check (single & multiple)
+* CPU Spike (single & repeated)
+* Application Crash
+* Full Incident Scenario (end-to-end)
+
+### Reliability & Recovery
+
+* Kubernetes auto-restarts failed pods
+* High availability using replicas
+* No manual intervention required
+
+### Observability Ready
+
+* Designed for Prometheus metrics
+* Grafana dashboards for CPU, pod restarts, and health
+
+---
+
+## 🧰 Technology Stack
+
+| Category         | Tools                                  |
+| ---------------- | -------------------------------------- |
+| Programming      | Node.js                                |
+| Containerization | Docker                                 |
+| Orchestration    | Kubernetes (Docker Desktop Kubernetes) |
+| Monitoring       | Prometheus                             |
+| Visualization    | Grafana                                |
+| Package Manager  | Helm                                   |
+| Version Control  | Git & GitHub                           |
+| CI/CD (Planned)  | GitHub Actions                         |
 
 ---
 
 ## 🧪 Incident Scenarios Supported
 
-| Scenario | Description |
-|--------|------------|
-| Health Check | Verifies service availability |
-| Health Check × N | Continuous health probing |
-| CPU Spike | Simulates CPU exhaustion |
-| CPU Spike × N | Repeated load testing |
-| Crash App | Simulates hard application crash |
-| Full Scenario | Normal → Degraded → Incident → Recovery |
+| Scenario         | Description                             |
+| ---------------- | --------------------------------------- |
+| Health Check     | Validates application availability      |
+| Health Check × N | Continuous probing simulation           |
+| CPU Spike        | Simulates CPU exhaustion                |
+| CPU Spike × N    | Repeated load testing                   |
+| Crash App        | Simulates hard application failure      |
+| Full Scenario    | Normal → Degraded → Incident → Recovery |
 
 ---
 
-## ▶ How to Run Locally
+## ▶️ How to Run Locally
 
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/<your-username>/incident-management-devops-platform.git
-cd incident-management-devops-platform
-````
-
-### 2️⃣ Install Dependencies
+### Step 1: Clone Repository
 
 ```bash
-npm install
+git clone https://github.com/AdeshAJ/Incident-Management-Auto-Recovery-DevOps-Platform.git
+cd Incident-Management-Auto-Recovery-DevOps-Platform
 ```
 
-### 3️⃣ Run the Application
+### Step 2: Run Application
 
 ```bash
 node app.js
 ```
 
-### 4️⃣ Open the Control Panel
+### Step 3: Open Control Panel
 
 ```
 http://localhost:3000
@@ -128,60 +161,59 @@ http://localhost:3000
 
 ---
 
-## ☸️ Kubernetes Deployment (Overview)
+## ☸️ Kubernetes Deployment (Summary)
 
-* Application is containerized using Docker
-* Deployed as a Kubernetes Deployment with multiple replicas
-* Liveness and readiness probes ensure health monitoring
+* Application runs inside Docker containers
+* Deployed using Kubernetes Deployment with replicas
+* Liveness & readiness probes monitor health
 * Kubernetes automatically restarts failed pods
 
 ---
 
-## 📊 Monitoring & Observability
+## 📊 Metrics & Observations
 
-* **Prometheus** collects metrics such as CPU usage and pod status
-* **Grafana** visualizes metrics using dashboards
-* CPU spikes and pod restarts can be observed in real time
-
----
-
-## 📈 Metrics & Results (Sample Observations)
-
-* **Availability:** ~99.9%
-* **Downtime Reduction:** ~70%
-* **Mean Time to Recovery (MTTR):** 30–60 seconds
-* **Incident Detection:** Immediate via probes and monitoring
+| Metric             | Result          |
+| ------------------ | --------------- |
+| Availability       | ~99.9%          |
+| Downtime Reduction | ~70%            |
+| MTTR               | 30–60 seconds   |
+| Recovery Type      | Fully automated |
 
 ---
 
 ## 🎓 Learning Outcomes
 
-* Hands-on experience with **incident management**
-* Practical understanding of **Kubernetes self-healing**
-* Monitoring and observability fundamentals
-* DevOps automation mindset
-* Ability to explain failures and recovery in interviews
+* Real-world incident management understanding
+* Hands-on Kubernetes self-healing
+* Monitoring & observability mindset
+* Production-style DevOps workflows
+* Confidence in explaining failures & recovery
 
 ---
 
-## 🧾 Resume Description (Use This)
+## 🧾 Resume Description
 
 > **Incident Management & Auto-Recovery DevOps Platform**
-> Built a Kubernetes-based DevOps platform with a graphical interface to simulate production incidents such as CPU spikes and application crashes, validating monitoring, alerting, and automated recovery mechanisms while reducing downtime by ~70%.
+> Designed and implemented a Kubernetes-based DevOps platform to simulate production incidents such as CPU spikes and application crashes, validating monitoring, alerting, and automated recovery mechanisms while reducing downtime by ~70%.
 
 ---
 
 ## 🚀 Future Enhancements
 
-* Prometheus custom metrics (`/metrics` endpoint)
+* Custom Prometheus metrics (`/metrics`)
 * Grafana dashboard auto-linking from UI
 * Readiness vs liveness probe separation
-* Incident history and MTTR calculation
+* Incident history & MTTR calculation
 * CI/CD pipeline using GitHub Actions
-* Alerting integration (Slack / Email)
+* Alerting via Slack / Email
 
 ---
 
+## 🏁 Conclusion
 
+This project demonstrates **real-world DevOps and SRE practices** with a strong focus on reliability, automation, and resilience.
+It is suitable as a **Major / Capstone Project** and aligns closely with **DevOps Engineer roles**.
 
 ```
+
+---
