@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!-- Declares HTML5 document -->
+<html>
+<head>
+  <!-- Title shown in browser tab -->
+  <title>Incident Management Dashboard</title>
+
+  <!-- Internal CSS for simple UI styling -->
+  <style>
+    /* Page background & font styling */
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding-top: 40px;
+    }
+
+    /* Main heading spacing */
+    h1 { margin-bottom: 10px; }
+
+    /* Paragraph spacing */
+    p { margin-bottom: 20px; }
+
+    /* Common button styling */
+    button {
+      padding: 14px 28px;
+      margin: 10px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Health button color */
+    .health { background: #22c55e; }
+
+    /* CPU button color */
+    .cpu { background: #f97316; }
+
+    /* Crash button color */
+    .crash { background: #ef4444; }
+
+    /* Scenario button color */
+    .scenario { background: #6366f1; }
+
+    /* Hover effect */
+    button:hover { opacity: 0.85; }
+
+    /* Result text styling */
+    #result {
+      margin-top: 25px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Main title -->
+<h1>🚨 Incident Management Control Panel</h1>
+
+<!-- Subtitle -->
+<p>Trigger incidents to test monitoring & auto-recovery</p>
+
+<!-- Single health check -->
+<button class="health" onclick="healthOnce()">Health Check</button>
+
+<!-- Multiple health checks -->
+<button class="health" onclick="healthMultiple()">Health Check × 5</button>
+
+<br/>
+
+<!-- Single CPU spike -->
+<button class="cpu" onclick="cpuOnce()">CPU Spike</button>
+
+<!-- Multiple CPU spikes -->
+<button class="cpu" onclick="cpuMultiple()">CPU Spike × 3</button>
+
+<br/>
+
+<!-- Crash button -->
+<button class="crash" onclick="crashApp()">Crash App</button>
+
+<br/>
+
+<!-- Full incident lifecycle simulation -->
+<button class="scenario" onclick="fullScenario()">🚨 Full Incident Scenario</button>
+
+<!-- Area to display results -->
+<div id="result"></div>
+
+<script>
+/* Perform one health check */
+function healthOnce() {
+  fetch('/health')
+    .then(res => res.text())
+    .then(data => showResult(data))
+    .catch(() => showResult("Health check failed"));
+}
+
+/* Perform health check 5 times automatically */
+function healthMultiple() {
+  let count = 0;
+  const max = 5;
+
+  const interval = setInterval(() => {
+    fetch('/health')
+      .then(res => res.text())
+      .then(data => showResult(`Health ${count + 1}: ${data}`))
+      .catch(() => showResult(`Health ${count + 1}: FAILED`));
+
+    count++;
+    if (count >= max) clearInterval(interval);
+  }, 2000); // every 2 seconds
+}
+
+/* Trigger single CPU spike */
+function cpuOnce() {
+  fetch('/cpu').catch(() => {});
+  showResult("🔥 CPU spike triggered");
+}
+
+/* Trigger CPU spike 3 times safely */
+function cpuMultiple() {
+  let count = 0;
+  const max = 3;
+
+  const interval = setInterval(() => {
+    fetch('/cpu').catch(() => {});
+    count++;
+    showResult(`🔥 CPU spike ${count} triggered`);
+    if (count >= max) clearInterval(interval);
+  }, 7000); // gap to avoid overload
+}
+
+/* Trigger crash */
+function crashApp() {
+  fetch('/crash').catch(() => {});
+  showResult("💥 Crash triggered");
+}
+
+/* Full incident lifecycle */
+function fullScenario() {
+  showResult("🚨 Full incident scenario started");
+
+  setTimeout(() => healthOnce(), 1000);
+  setTimeout(() => healthOnce(), 3000);
+  setTimeout(() => cpuOnce(), 6000);
+  setTimeout(() => crashApp(), 12000);
+}
+
+/* Display result text */
+function showResult(msg) {
+  document.getElementById("result").innerText = msg;
+}
+</script>
+
+</body>
+</html>
